@@ -1,0 +1,2 @@
+kubectl create clusterrolebinding denny.softplan-cluster-admin-binding 
+  --clusterrole=cluster-admin --user=denny.softplan@gmail.com

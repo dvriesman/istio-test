@@ -1,0 +1,90 @@
+##################################################################################################
+# XAPI service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: xapi
+  labels:
+    app: xapi
+spec:
+  ports:
+  - port: 5000
+    name: http
+  selector:
+    app: xapi
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: xapi-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: xapi
+        version: v1
+    spec:
+      containers:
+      - name: xapi
+        image: dvriesman/xapi:1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: xapi-v2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: xapi
+        version: v2
+    spec:
+      containers:
+      - name: xapi
+        image: dvriesman/xapi:2.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+---
+
+##################################################################################################
+# Frontend services
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  ports:
+  - port: 80
+    name: http
+  selector:
+    app: frontend
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: frontend
+        version: v1
+    spec:
+      containers:
+      - name: frontend
+        image: dvriesman/myapp:1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+---
